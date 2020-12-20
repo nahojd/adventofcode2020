@@ -20,14 +20,12 @@ namespace _2
 
 		static int IsValid(string line)
 		{
-			var min = int.Parse(line.Substring(0, line.IndexOf("-")));
-			var max = int.Parse(line.Substring(line.IndexOf("-")+1, line.IndexOf(" ")-line.IndexOf("-")-1));
+			var first = int.Parse(line.Substring(0, line.IndexOf("-")));
+			var second = int.Parse(line.Substring(line.IndexOf("-")+1, line.IndexOf(" ")-line.IndexOf("-")-1));
 			var c = Convert.ToChar(line.Substring(line.IndexOf(":")-1, 1));
 			var pwd = line.Substring(line.IndexOf(":")+2);
 
-			var count = pwd.Where(x => x == c).Count();
-			return min <= count && count <= max ? 1 : 0;
+			return pwd[first-1] == c ^ pwd[second-1] == c ? 1 : 0;
 		}
 	}
-
 }
