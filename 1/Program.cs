@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Spectre.Console;
@@ -19,30 +20,39 @@ namespace _1
 					task1.StartTask();
 					task1.Increment(1);
 
-					int number1 = -1;
-					int number2 = -1;
-
-					for (var i=1; i<numbers.Count; i++)
-					{
-						task1.Increment(1);
-
-						for (var j=0; j<i; j++) {
-							if (numbers[i] + numbers[j] == 2020)
-							{
-								number1 = numbers[i];
-								number2 = numbers[j];
-								break;
-							}
-						}
-
-						if (number1 >= 0)
-							break;
-					}
+					var (number1, number2, number3) = FindNumbers(numbers, task1);
 
 					task1.StopTask();
 
-					AnsiConsole.MarkupLine($"[green]{number1} * {number2} = {number1*number2}[/]");
+					AnsiConsole.MarkupLine($"[green]{number1} * {number2} * {number3} = {number1*number2*number3}[/]");
 				});
+		}
+
+		static (int,int,int) FindNumbers(List<int> numbers, ProgressTask task1)
+		{
+			for (var i=0; i<numbers.Count; i++)
+			{
+				task1.Increment(1);
+
+				for (var j=0; j<numbers.Count; j++)
+				{
+					if (j==i)
+						continue;
+
+					for (var k=0; k<numbers.Count; k++)
+					{
+						if (k==i || k==j)
+							continue;
+
+						if (numbers[i] + numbers[j] + numbers[k] == 2020)
+						{
+							return (numbers[i], numbers[j], numbers[k]);
+						}
+					}
+				}
+			}
+
+			throw new Exception("Now, this was unexpected!");
 		}
 	}
 }
